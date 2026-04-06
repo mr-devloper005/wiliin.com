@@ -1,20 +1,9 @@
 import Link from "next/link";
-import { ArrowRight, Building2, FileText, Image as ImageIcon, LayoutGrid, Tag, Users } from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 import type { SitePost } from "@/lib/site-connector";
 import type { TaskConfig } from "@/lib/site-config";
 import { TaskFeedCarousel } from "@/components/home/task-feed-carousel";
 import { siteContent } from "@/config/site.content";
-
-const taskIcons: Record<string, any> = {
-  listing: Building2,
-  classified: Tag,
-  article: FileText,
-  image: ImageIcon,
-  profile: Users,
-  social: LayoutGrid,
-  sbm: LayoutGrid,
-  pdf: FileText,
-};
 
 export function TaskFeedSection({
   task,
@@ -26,34 +15,33 @@ export function TaskFeedSection({
   if (!posts.length) return null;
 
   return (
-    <section className="py-14 sm:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 grid gap-5 border-b border-[rgba(110,26,55,0.14)] pb-6 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
-            <div className="editorial-label">
-              {(() => {
-                const Icon = taskIcons[task.key] || LayoutGrid;
-                return <Icon className="h-3.5 w-3.5" />;
-              })()}
+    <section className="border-t border-border/50 bg-background py-14 sm:py-16 lg:py-20">
+      <div className="site-container max-w-[var(--container-site)]">
+        <div className="flex flex-col gap-8 border-b border-border/40 pb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+          <div className="max-w-4xl">
+            <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+              <FileText className="h-3.5 w-3.5 opacity-80" aria-hidden />
               {task.label}
-            </div>
-            <h2 className="mt-4 text-3xl font-semibold text-[#35131f] sm:text-[2.15rem]">
+            </p>
+            <h2 className="mt-5 text-balance font-[family-name:var(--font-display)] text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-foreground sm:text-[2.25rem] md:text-[2.5rem]">
               {siteContent.taskSectionHeading.replace("{label}", task.label)}
             </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6e555d] sm:text-[15px]">
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
               {task.description || siteContent.taskSectionDescriptionSuffix}
             </p>
           </div>
           <Link
             href={task.route}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-[#8f1f3f] transition hover:text-[#6e1a37]"
+            className="inline-flex shrink-0 items-center gap-2 self-start text-sm font-semibold text-primary underline-offset-4 transition hover:underline lg:self-end"
           >
             View all
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <TaskFeedCarousel task={task} posts={posts} />
+        <div className="mt-10">
+          <TaskFeedCarousel task={task} posts={posts} />
+        </div>
       </div>
     </section>
   );

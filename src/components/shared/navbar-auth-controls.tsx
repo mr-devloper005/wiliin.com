@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Bell, Bookmark, ChevronDown, LayoutGrid, LogOut, Plus, Settings, User, FileText, Building2, Tag, Image as ImageIcon } from 'lucide-react'
+import { Bell, ChevronDown, FileText, LayoutGrid, LogOut, Plus, Settings, User, Building2, Tag, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -14,7 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/lib/auth-context'
-import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
+import { type TaskKey } from '@/lib/site-config'
+import { getTasksForShell } from '@/config/site.ui'
 
 const taskIcons: Record<TaskKey, any> = {
   article: FileText,
@@ -32,49 +33,66 @@ const taskIcons: Record<TaskKey, any> = {
 export function NavbarAuthControls() {
   const { user, logout } = useAuth()
   const { toast } = useToast()
+  const shellTasks = getTasksForShell()
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="sm" className="hidden h-10 gap-1 rounded-full bg-[#AE2448] px-4 text-white shadow-[0_16px_30px_rgba(174,36,72,0.24)] hover:bg-[#8e1b3b] sm:flex">
+      {shellTasks.length === 1 ? (
+        <Button
+          size="sm"
+          asChild
+          className="hidden h-10 gap-1 rounded-full bg-primary px-4 text-primary-foreground shadow-[var(--shadow-card)] hover:bg-primary/90 sm:flex"
+        >
+          <Link href={`/create/${shellTasks[0].key}`}>
             <Plus className="h-4 w-4" />
-            Create
-            <ChevronDown className="h-3 w-3" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
-          {SITE_CONFIG.tasks.filter((task) => task.enabled).map((task) => {
-            const Icon = taskIcons[task.key] || LayoutGrid
-            return (
-              <DropdownMenuItem key={task.key} asChild>
-                <Link href={`/create/${task.key}`}>
-                  <Icon className="mr-2 h-4 w-4" />
-                  Create {task.label}
-                </Link>
-              </DropdownMenuItem>
-            )
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+            New {shellTasks[0].label.replace(/s$/i, '')}
+          </Link>
+        </Button>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              size="sm"
+              className="hidden h-10 gap-1 rounded-full bg-primary px-4 text-primary-foreground shadow-[var(--shadow-card)] hover:bg-primary/90 sm:flex"
+            >
+              <Plus className="h-4 w-4" />
+              Create
+              <ChevronDown className="h-3 w-3" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 border-border bg-popover">
+            {shellTasks.map((task) => {
+              const Icon = taskIcons[task.key] || LayoutGrid
+              return (
+                <DropdownMenuItem key={task.key} asChild>
+                  <Link href={`/create/${task.key}`}>
+                    <Icon className="mr-2 h-4 w-4" />
+                    Create {task.label}
+                  </Link>
+                </DropdownMenuItem>
+              )
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative rounded-full text-[#5f4750] hover:bg-[rgba(110,26,55,0.06)] hover:text-[#8f1f3f]">
+          <Button variant="ghost" size="icon" className="relative rounded-full text-muted-foreground hover:bg-primary/[0.06] hover:text-primary">
             <Bell className="h-5 w-5" />
-            <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full bg-[#72BAA9] p-0 text-[10px] text-[#10211c]">
+            <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full bg-accent p-0 text-[10px] text-accent-foreground">
               3
             </Badge>
             <span className="sr-only">Notifications</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-80 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
-          <div className="flex items-center justify-between border-b border-[rgba(110,26,55,0.08)] p-3">
-            <span className="text-sm font-semibold text-[#35131f]">Notifications</span>
+        <DropdownMenuContent align="end" className="w-80 border-border bg-popover">
+          <div className="flex items-center justify-between border-b border-border p-3">
+            <span className="text-sm font-semibold text-foreground">Notifications</span>
             <Button
               variant="ghost"
               size="sm"
-              className="h-auto p-0 text-xs text-[#7f646b]"
+              className="h-auto p-0 text-xs text-muted-foreground"
               onClick={() =>
                 toast({
                   title: 'Notifications cleared',
@@ -88,15 +106,15 @@ export function NavbarAuthControls() {
           <div className="max-h-80 overflow-y-auto">
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
               <span className="text-sm">Your article was published</span>
-              <span className="text-xs text-[#7f646b]">2 minutes ago</span>
+              <span className="text-xs text-muted-foreground">2 minutes ago</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <span className="text-sm">New follower: James Chen</span>
-              <span className="text-xs text-[#7f646b]">1 hour ago</span>
+              <span className="text-sm">New comment on your article</span>
+              <span className="text-xs text-muted-foreground">1 hour ago</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <span className="text-sm">Your listing is expiring soon</span>
-              <span className="text-xs text-[#7f646b]">3 hours ago</span>
+              <span className="text-sm">Draft saved: weekend essay</span>
+              <span className="text-xs text-muted-foreground">3 hours ago</span>
             </DropdownMenuItem>
           </div>
         </DropdownMenuContent>
@@ -104,29 +122,29 @@ export function NavbarAuthControls() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full text-[#5f4750] hover:bg-[rgba(110,26,55,0.06)] hover:text-[#8f1f3f]">
-            <Avatar className="h-9 w-9 border border-[rgba(110,26,55,0.12)]">
+          <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:bg-primary/[0.06] hover:text-primary">
+            <Avatar className="h-9 w-9 border border-border">
               <AvatarImage src={user?.avatar} alt={user?.name} />
               <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 border-[rgba(110,26,55,0.12)] bg-[rgba(255,250,244,0.98)]">
+        <DropdownMenuContent align="end" className="w-56 border-border bg-popover">
           <div className="flex items-center gap-3 p-3">
-            <Avatar className="h-10 w-10 border border-[rgba(110,26,55,0.12)]">
+            <Avatar className="h-10 w-10 border border-border">
               <AvatarImage src={user?.avatar} alt={user?.name} />
               <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               <span className="text-sm font-medium">{user?.name}</span>
-              <span className="text-xs text-[#7f646b]">{user?.email}</span>
+              <span className="text-xs text-muted-foreground">{user?.email}</span>
             </div>
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/dashboard/saved">
-              <Bookmark className="mr-2 h-4 w-4" />
-              Saved Items
+              <FileText className="mr-2 h-4 w-4" />
+              Saved articles
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>

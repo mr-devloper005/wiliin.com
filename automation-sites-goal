@@ -5,7 +5,7 @@ Isko template banane ke liye hume code ko 3 buckets me dekhna hoga:
 
 A. Core reusable logic
 Ye har site me same rehna chahiye:
-
+Yash niahalni
 master panel connector
 feed fetching
 task rendering system
@@ -22,7 +22,7 @@ deploy/docker/nginx/github-actions setup
 B. Site-config driven parts
 Ye per site change hona chahiye:
 
-site name
+site name 
 domain
 site code
 logo

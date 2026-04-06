@@ -42,7 +42,7 @@ export default async function SearchPage({
       ? feed.posts
       : useMaster
         ? []
-        : SITE_CONFIG.tasks.flatMap((task) => getMockPostsForTask(task.key));
+        : getMockPostsForTask("article");
 
   const filtered = posts.filter((post) => {
     const content = post.content && typeof post.content === "object" ? post.content : {};
@@ -76,7 +76,7 @@ export default async function SearchPage({
       description={
         query
           ? `Results for "${query}"`
-          : "Browse the latest posts across every task."
+          : "Search across published posts and articles."
       }
       actions={
         <form action="/search" className="flex w-full gap-2 sm:w-auto">
@@ -88,7 +88,7 @@ export default async function SearchPage({
             <Input
               name="q"
               defaultValue={query}
-              placeholder="Search across tasks..."
+              placeholder="Search articles and posts…"
               className="h-11 pl-9"
             />
           </div>
@@ -99,15 +99,22 @@ export default async function SearchPage({
       }
     >
       {results.length ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
           {results.map((post) => {
             const task = getPostTaskKey(post);
             const href = task ? buildPostUrl(task, post.slug) : `/posts/${post.slug}`;
-            return <TaskPostCard key={post.id} post={post} href={href} />;
+            return (
+              <TaskPostCard
+                key={post.id}
+                post={post}
+                href={href}
+                taskKey={task ?? undefined}
+              />
+            );
           })}
         </div>
       ) : (
-        <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
+        <div className="rounded-[var(--radius-editorial-lg)] border border-dashed border-border/80 bg-muted/25 p-12 text-center text-sm text-muted-foreground">
           No matching posts yet.
         </div>
       )}
