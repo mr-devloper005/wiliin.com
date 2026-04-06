@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { TaskPostCard } from "@/components/shared/task-post-card";
+import { cn } from "@/lib/utils";
 import { buildPostUrl } from "@/lib/task-data";
 import { normalizeCategory, isValidCategory } from "@/lib/categories";
 import type { TaskKey } from "@/lib/site-config";
@@ -54,14 +55,19 @@ export function TaskListClient({ task, initialPosts, category }: Props) {
 
   if (!merged.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
+      <div className="rounded-[var(--radius-editorial-lg)] border border-dashed border-border/80 bg-muted/30 p-12 text-center text-sm leading-relaxed text-muted-foreground">
         No posts yet for this section.
       </div>
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    <div
+      className={cn(
+        "grid gap-7 sm:grid-cols-2",
+        task === "article" ? "lg:grid-cols-3 xl:gap-8" : "lg:grid-cols-4"
+      )}
+    >
       {merged.map((post) => {
         const localOnly = (post as any).localOnly;
         const href = localOnly

@@ -22,7 +22,7 @@ deploy/docker/nginx/github-actions setup
 B. Site-config driven parts
 Ye per site change hona chahiye:
 
-site name - ADITYAAAAAAAA
+site name 
 domain
 site code
 logo

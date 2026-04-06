@@ -3,11 +3,8 @@
 import { motion } from 'framer-motion'
 import { 
   FileText, 
-  Building2, 
-  Tag, 
   Search, 
   MessageCircle, 
-  Bookmark,
   Bell,
   Users,
   FolderOpen
@@ -65,10 +62,10 @@ export function NoArticlesFound() {
 export function NoListingsFound() {
   return (
     <EmptyState
-      icon={Building2}
-      title="No listings found"
-      description="We couldn't find any listings matching your search. Try different filters or expand your search area."
-      action={{ label: 'Browse All Listings', href: '/listings' }}
+      icon={FileText}
+      title="Nothing to show here"
+      description="Try the article library or search the archive for stories and topics."
+      action={{ label: 'Browse articles', href: '/articles' }}
     />
   )
 }
@@ -76,10 +73,10 @@ export function NoListingsFound() {
 export function NoAdsFound() {
   return (
     <EmptyState
-      icon={Tag}
-      title="No ads found"
-      description="There are no classified ads matching your criteria. Check back later or try different search terms."
-      action={{ label: 'Browse All Ads', href: '/classifieds' }}
+      icon={FileText}
+      title="Nothing to show here"
+      description="Try the article library or search the archive for stories and topics."
+      action={{ label: 'Browse articles', href: '/articles' }}
     />
   )
 }
@@ -108,10 +105,10 @@ export function NoComments() {
 export function NoSavedItems() {
   return (
     <EmptyState
-      icon={Bookmark}
-      title="No saved items"
-      description="Items you bookmark will appear here. Start exploring and save content you want to revisit."
-      action={{ label: 'Explore Content', href: '/' }}
+      icon={FileText}
+      title="No saved articles"
+      description="Articles you save will appear here. Browse the library and save pieces to read later."
+      action={{ label: 'Browse articles', href: '/articles' }}
     />
   )
 }
