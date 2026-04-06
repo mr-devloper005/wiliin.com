@@ -4,9 +4,9 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 const notifications = [
-  { id: 1, title: 'New follower', detail: 'Emily Rodriguez started following you.', time: '2 hours ago' },
-  { id: 2, title: 'Bookmark saved', detail: 'Your link was saved 12 times today.', time: '5 hours ago' },
-  { id: 3, title: 'Listing approved', detail: 'TechHub Coworking Space is now live.', time: '1 day ago' },
+  { id: 1, title: 'New comment', detail: 'Someone replied to your latest article.', time: '2 hours ago' },
+  { id: 2, title: 'Draft reminder', detail: 'Your weekend essay draft was auto-saved.', time: '5 hours ago' },
+  { id: 3, title: 'Article published', detail: 'Your piece is now live in the library.', time: '1 day ago' },
 ]
 
 export default function DashboardNotificationsPage() {

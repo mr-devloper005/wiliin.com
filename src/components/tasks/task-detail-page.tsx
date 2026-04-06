@@ -220,13 +220,13 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   return (
     <div className="min-h-screen bg-background">
       <NavbarShell />
-      <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <main className="site-container max-w-[var(--container-site)] py-10 sm:py-12 lg:py-14">
         <SchemaJsonLd data={schemaPayload} />
         <Link
           href={taskConfig?.route || "/"}
-          className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:border-primary/25 hover:text-foreground"
         >
-          ← Back to {taskConfig?.label || "posts"}
+          <span aria-hidden>←</span> Back to {taskConfig?.label || "posts"}
         </Link>
 
         <div
@@ -237,32 +237,49 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
         >
           <div className={cn(isClassified ? "space-y-8" : "")}>
             {isArticle ? (
-              <div className="mx-auto w-full max-w-4xl space-y-6">
-                <h1 className="text-4xl font-semibold leading-tight text-foreground">
-                  {post.title}
-                </h1>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-                  <span>By {articleAuthor}</span>
-                  {articleDate ? <span>{articleDate}</span> : null}
-                  <Badge variant="secondary" className="inline-flex items-center gap-1">
-                    <Tag className="h-3.5 w-3.5" />
-                    {category}
-                  </Badge>
-                </div>
-                {postTags.length ? (
-                  <div className="flex flex-wrap gap-2">
-                    {postTags.map((tag) => (
-                      <Badge key={tag} variant="outline">
-                        {tag}
+              <div className="w-full">
+                <div className="relative overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border/70 bg-gradient-to-br from-card via-muted/20 to-background p-6 shadow-[var(--shadow-md)] sm:p-10 lg:p-12">
+                  <div
+                    className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-primary/12 blur-3xl"
+                    aria-hidden
+                  />
+                  <div className="article-measure relative space-y-6">
+                    <div className="kicker-rule" aria-hidden />
+                    <h1 className="text-balance font-[family-name:var(--font-display)] text-4xl font-semibold leading-[1.12] tracking-tight text-foreground sm:text-5xl">
+                      {post.title}
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
+                      <span className="font-medium text-foreground/90">By {articleAuthor}</span>
+                      {articleDate ? (
+                        <>
+                          <span className="text-border" aria-hidden>
+                            ·
+                          </span>
+                          <time dateTime={post.publishedAt || undefined}>{articleDate}</time>
+                        </>
+                      ) : null}
+                      <Badge variant="secondary" className="inline-flex items-center gap-1 border border-border/60 bg-background/80">
+                        <Tag className="h-3.5 w-3.5" />
+                        {category}
                       </Badge>
-                    ))}
+                    </div>
+                    {postTags.length ? (
+                      <div className="flex flex-wrap gap-2">
+                        {postTags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="border-dashed">
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    ) : null}
+                    {articleSummary ? (
+                      <p className="text-[var(--text-lead)] leading-[1.75] text-muted-foreground">{articleSummary}</p>
+                    ) : null}
                   </div>
-                ) : null}
-                {articleSummary ? (
-                  <p className="text-base leading-7 text-muted-foreground">{articleSummary}</p>
-                ) : null}
+                </div>
+
                 {images[0] ? (
-                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl border border-border bg-muted">
+                  <div className="article-measure relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border bg-muted shadow-[var(--shadow-lg)] sm:mt-10">
                     <ContentImage
                       src={images[0]}
                       alt={`${post.title} featured image`}
@@ -273,8 +290,13 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                     />
                   </div>
                 ) : null}
-                <RichContent html={articleHtml} className="leading-8 prose-p:my-6 prose-h2:my-8 prose-h3:my-6 prose-ul:my-6" />
-                <ArticleComments slug={post.slug} />
+
+                <div className="article-measure mt-10 sm:mt-12">
+                  <RichContent html={articleHtml} className="leading-8 prose-p:my-6 prose-h2:my-8 prose-h3:my-6 prose-ul:my-6" />
+                </div>
+                <div className="article-measure mt-12 border-t border-border/80 pt-10">
+                  <ArticleComments slug={post.slug} />
+                </div>
               </div>
             ) : null}
 
@@ -445,36 +467,40 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
           ) : null}
         </div>
 
-        <section className="mt-12">
+        <section className="mt-14 border-t border-border/70 pt-12 sm:mt-16 sm:pt-14">
           {related.length ? (
             <>
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-foreground">
-                More in {category}
-              </h2>
+            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="kicker-rule" aria-hidden />
+                <h2 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                  More in {category}
+                </h2>
+              </div>
               {taskConfig?.route && (
                 <Link
                   href={taskConfig.route}
-                  className="text-sm text-muted-foreground hover:text-foreground"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:text-primary/80"
                 >
                   View all
                 </Link>
               )}
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
               {related.map((item) => (
                 <TaskPostCard
                   key={item.id}
                   post={item}
                   href={buildPostUrl(task, item.slug)}
+                  taskKey={task}
                 />
               ))}
             </div>
             </>
           ) : null}
-          <nav className="mt-6 rounded-2xl border border-border bg-card/60 p-4">
-            <p className="text-sm font-semibold text-foreground">Related links</p>
-            <ul className="mt-2 space-y-2 text-sm">
+          <nav className="mt-10 rounded-[var(--radius-editorial)] border border-border bg-card/70 p-5 shadow-[var(--shadow-sm)] sm:p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">Related links</p>
+            <ul className="mt-4 space-y-3 text-sm">
               {related.map((item) => (
                 <li key={`link-${item.id}`}>
                   <Link

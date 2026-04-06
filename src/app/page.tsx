@@ -8,6 +8,7 @@ import { CTASection } from "@/components/home/cta-section";
 import { TaskFeedSection } from "@/components/home/task-feed-section";
 import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
 import { SITE_CONFIG } from "@/lib/site-config";
+import { getTasksForShell } from "@/config/site.ui";
 import { buildPageMetadata } from "@/lib/seo";
 import { fetchTaskPosts, getPostImages } from "@/lib/task-data";
 import { siteContent } from "@/config/site.content";
@@ -29,9 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const taskFeed = (
     await Promise.all(
-      SITE_CONFIG.tasks
-        .filter((task) => task.enabled)
-        .map(async (task) => ({
+      getTasksForShell().map(async (task) => ({
           task,
           posts: await fetchTaskPosts(task.key, 4, { allowMockFallback: false, fresh: true }),
         }))
@@ -41,7 +40,7 @@ export default async function HomePage() {
   const heroImages = taskFeed
     .flatMap(({ posts }) => posts.flatMap((post) => getPostImages(post)))
     .filter(Boolean)
-    .slice(0, 3);
+    .slice(0, 12);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -72,43 +71,52 @@ export default async function HomePage() {
           ]}
         />
 
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-14">
-            <div>
-              <span className="editorial-label">{siteContent.home.introBadge}</span>
-              <h2 className="editorial-divider mt-5 pb-5 text-4xl font-semibold text-[#3a1622] sm:text-5xl">
+        <section className="border-t border-border/40 bg-gradient-to-b from-background to-muted/20">
+          <div className="site-container editorial-section-y max-w-[var(--container-site)]">
+            <div className="mx-auto max-w-3xl text-center">
+              <span className="inline-flex items-center justify-center text-[11px] font-semibold uppercase tracking-[0.28em] text-muted-foreground">
+                {siteContent.home.introBadge}
+              </span>
+              <h2 className="mt-6 text-balance font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.12] tracking-tight text-foreground sm:text-4xl md:text-[2.65rem]">
                 {siteContent.home.introTitle}
               </h2>
-              <div className="space-y-5 text-[15px] leading-8 text-[#5a4148] sm:text-base">
+            </div>
+
+            <div className="mx-auto mt-12 grid max-w-5xl gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-16">
+              <div className="space-y-6 text-[15px] leading-[1.85] text-muted-foreground sm:text-base">
                 {siteContent.home.introParagraphs.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-            </div>
 
-            <aside className="paper-panel rounded-[2rem] p-6 sm:p-8">
-              <span className="editorial-label">{siteContent.home.sideBadge}</span>
-              <ul className="mt-6 space-y-4 text-sm leading-7 text-[#553941]">
-                {siteContent.home.sidePoints.map((point) => (
-                  <li key={point}>{point}</li>
-                ))}
-              </ul>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href={siteContent.home.primaryLink.href}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#AE2448] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#8e1b3b]"
-                >
-                  {siteContent.home.primaryLink.label}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href={siteContent.home.secondaryLink.href}
-                  className="inline-flex items-center gap-2 rounded-full border border-[rgba(110,26,55,0.15)] bg-white/70 px-5 py-3 text-sm font-semibold text-[#521a2d] transition hover:bg-white"
-                >
-                  {siteContent.home.secondaryLink.label}
-                </Link>
-              </div>
-            </aside>
+              <aside className="border border-border/70 bg-card/60 p-6 sm:p-8 lg:sticky lg:top-28">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
+                  {siteContent.home.sideBadge}
+                </span>
+                <ul className="mt-5 space-y-3 text-sm leading-relaxed text-muted-foreground">
+                  {siteContent.home.sidePoints.map((point) => (
+                    <li key={point} className="border-l-2 border-primary/35 pl-4">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href={siteContent.home.primaryLink.href}
+                    className="inline-flex items-center justify-center gap-2 rounded-sm border border-foreground/20 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
+                  >
+                    {siteContent.home.primaryLink.label}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link
+                    href={siteContent.home.secondaryLink.href}
+                    className="inline-flex items-center justify-center gap-2 rounded-sm border border-border bg-transparent px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-muted/50"
+                  >
+                    {siteContent.home.secondaryLink.label}
+                  </Link>
+                </div>
+              </aside>
+            </div>
           </div>
         </section>
 

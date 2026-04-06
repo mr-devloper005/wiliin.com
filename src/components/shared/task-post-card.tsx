@@ -4,6 +4,7 @@ import { ExternalLink, FileText, Mail, MapPin, Tag } from "lucide-react";
 import type { SitePost } from "@/lib/site-connector";
 import { CATEGORY_OPTIONS, normalizeCategory } from "@/lib/categories";
 import type { TaskKey } from "@/lib/site-config";
+import { cn } from "@/lib/utils";
 
 type ListingContent = {
   location?: string;
@@ -56,11 +57,17 @@ export function TaskPostCard({
   href,
   taskKey,
   compact,
+  visualVariant = "default",
+  collectionLabel,
 }: {
   post: SitePost;
   href: string;
   taskKey?: TaskKey;
   compact?: boolean;
+  /** Gallery / museum row — tighter hierarchy, document-forward (homepage carousels) */
+  visualVariant?: "default" | "gallery";
+  /** Shown as “Part of …” in gallery mode */
+  collectionLabel?: string;
 }) {
   const content = getContent(post);
   const image = getImageUrl(post, content);
@@ -70,6 +77,7 @@ export function TaskPostCard({
     CATEGORY_OPTIONS.find((item) => item.slug === normalizedCategory)?.name || rawCategory;
 
   const variant = taskKey || "listing";
+  const isArticleCard = variant === "article";
   const isBookmarkVariant = variant === "sbm" || variant === "social";
   const imageAspect =
     variant === "image"
@@ -90,36 +98,70 @@ export function TaskPostCard({
         ? "(max-width: 640px) 82vw, (max-width: 1024px) 34vw, 320px"
         : "(max-width: 640px) 85vw, (max-width: 1024px) 42vw, 340px";
 
+  if (visualVariant === "gallery" && isArticleCard && !isBookmarkVariant) {
+    return (
+      <Link
+        href={href}
+        className="group flex h-full flex-col border border-border/80 bg-card text-left shadow-none transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:border-primary/35 hover:bg-muted/25"
+      >
+        <div className="relative aspect-[3/4] overflow-hidden bg-muted">
+          <ContentImage
+            src={image}
+            alt={altText}
+            fill
+            sizes={imageSizes}
+            quality={78}
+            className="object-cover grayscale-[0.08] transition duration-500 ease-[var(--ease-editorial)] group-hover:grayscale-0"
+            intrinsicWidth={960}
+            intrinsicHeight={1280}
+          />
+        </div>
+        <div className="flex flex-1 flex-col border-t border-border/60 px-3 py-4 sm:px-4">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Article</p>
+          <h3 className="mt-2 line-clamp-4 font-[family-name:var(--font-display)] text-[0.95rem] font-semibold leading-snug tracking-tight text-foreground sm:text-base">
+            {post.title}
+          </h3>
+          {collectionLabel ? (
+            <p className="mt-3 text-xs leading-snug">
+              <span className="text-muted-foreground">Part of </span>
+              <span className="font-medium text-primary underline underline-offset-[3px]">{collectionLabel}</span>
+            </p>
+          ) : null}
+        </div>
+      </Link>
+    );
+  }
+
   if (isBookmarkVariant) {
     return (
       <Link
         href={href}
-        className="group flex h-full flex-row items-start gap-4 overflow-hidden rounded-[1.75rem] border border-[rgba(110,26,55,0.12)] bg-[linear-gradient(180deg,rgba(255,252,247,0.98),rgba(255,247,239,0.92))] p-5 shadow-[0_18px_48px_rgba(85,35,42,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(85,35,42,0.12)]"
+        className="group flex h-full flex-row items-start gap-4 overflow-hidden rounded-[1.75rem] border border-border bg-card p-5 shadow-[var(--shadow-card)] transition duration-[var(--duration-normal)] ease-[var(--ease-editorial)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-editorial)]"
       >
-        <div className="mt-1 rounded-full bg-[rgba(110,26,55,0.08)] p-2.5 text-[#6e1a37] transition group-hover:bg-[#6e1a37] group-hover:text-white">
+        <div className="mt-1 rounded-full bg-primary/10 p-2.5 text-primary transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] group-hover:bg-primary group-hover:text-primary-foreground">
           <ExternalLink className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-[rgba(110,26,55,0.08)] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6e1a37]">
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
               <Tag className="h-3.5 w-3.5" />
               {category}
             </span>
             {content.location ? (
-              <span className="inline-flex items-center gap-1 text-xs text-[#7b5f66]">
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="h-3.5 w-3.5" />
                 {content.location}
               </span>
             ) : null}
           </div>
-          <h3 className="mt-3 line-clamp-2 text-lg font-semibold leading-snug text-[#32111d] group-hover:text-[#8f1f3f]">
+          <h3 className="mt-3 line-clamp-2 text-lg font-semibold leading-snug text-foreground group-hover:text-primary">
             {post.title}
           </h3>
-          <p className="mt-2 line-clamp-3 text-sm leading-7 text-[#71565d]">
+          <p className="mt-2 line-clamp-3 text-sm leading-7 text-muted-foreground">
             {getExcerpt(content.description || post.summary, compact ? 120 : 180) || "Explore this bookmark."}
           </p>
           {content.email ? (
-            <div className="mt-3 inline-flex items-center gap-1 text-xs text-[#7b5f66]">
+            <div className="mt-3 inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Mail className="h-3.5 w-3.5" />
               {content.email}
             </div>
@@ -132,47 +174,80 @@ export function TaskPostCard({
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col overflow-hidden rounded-[1.9rem] border border-[rgba(110,26,55,0.12)] bg-[linear-gradient(180deg,rgba(255,252,247,0.98),rgba(255,247,239,0.92))] shadow-[0_20px_60px_rgba(85,35,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-[rgba(110,26,55,0.18)] hover:shadow-[0_24px_70px_rgba(85,35,42,0.14)]"
+      className={cn(
+        "group flex h-full flex-col overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border bg-card shadow-[var(--shadow-md)] transition duration-[var(--duration-normal)] ease-[var(--ease-editorial)] hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[var(--shadow-lg)]",
+        isArticleCard && "bg-gradient-to-b from-card via-card to-muted/35 ring-1 ring-border/50"
+      )}
     >
-      <div className={`relative ${imageAspect} overflow-hidden bg-[#ede2dc]`}>
+      <div
+        className={cn(
+          "relative overflow-hidden bg-muted",
+          imageAspect,
+          isArticleCard && "mx-4 mt-4 rounded-xl border border-border/60 shadow-inner",
+          !isArticleCard && "rounded-t-[var(--radius-editorial-lg)]"
+        )}
+      >
         <ContentImage
           src={image}
           alt={altText}
           fill
           sizes={imageSizes}
           quality={75}
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          className="object-cover transition-transform duration-500 ease-[var(--ease-editorial)] group-hover:scale-[1.03]"
           intrinsicWidth={960}
           intrinsicHeight={720}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[rgba(30,12,17,0.46)] via-transparent to-transparent opacity-80" />
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-[rgba(22,9,18,0.72)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md">
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-t from-foreground/45 via-transparent to-transparent opacity-80",
+            isArticleCard && "from-foreground/35 opacity-70"
+          )}
+        />
+        <span
+          className={cn(
+            "absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md",
+            isArticleCard && "left-5 top-5 bg-black/45"
+          )}
+        >
           <Tag className="h-3.5 w-3.5" />
           {category}
         </span>
         {variant === "pdf" && (
-          <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-[rgba(255,252,247,0.88)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#32111d] shadow">
+          <span className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-card/90 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm">
             <FileText className="h-3.5 w-3.5" />
             PDF
           </span>
         )}
       </div>
-      <div className={`flex flex-1 flex-col p-5 ${compact ? "py-4" : ""}`}>
-        <h3 className={`line-clamp-2 font-semibold leading-snug text-[#32111d] ${variant === "article" ? "text-[1.35rem]" : "text-lg"}`}>
+      <div className={cn("flex flex-1 flex-col", compact ? "py-4" : "p-6", isArticleCard && "px-6 pb-6 pt-4")}>
+        {isArticleCard ? (
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-primary/90">Article</span>
+        ) : null}
+        <h3
+          className={cn(
+            "line-clamp-2 font-semibold leading-snug text-foreground",
+            isArticleCard ? "mt-2 text-[1.35rem] font-[family-name:var(--font-display)] tracking-tight" : "text-lg"
+          )}
+        >
           {post.title}
         </h3>
-        <p className={`mt-3 text-sm leading-7 text-[#70545d] ${variant === "article" ? "line-clamp-4" : "line-clamp-3"}`}>
+        <p
+          className={cn(
+            "mt-3 text-sm leading-7 text-muted-foreground",
+            isArticleCard ? "line-clamp-4" : "line-clamp-3"
+          )}
+        >
           {getExcerpt(content.description || post.summary) || "Explore this post."}
         </p>
         <div className="mt-auto pt-4">
           {content.location && (
-            <div className="inline-flex items-center gap-1 text-xs text-[#7b5f66]">
+            <div className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <MapPin className="h-3.5 w-3.5" />
               {content.location}
             </div>
           )}
           {content.email && (
-            <div className="mt-2 inline-flex items-center gap-1 text-xs text-[#7b5f66]">
+            <div className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
               <Mail className="h-3.5 w-3.5" />
               {content.email}
             </div>
