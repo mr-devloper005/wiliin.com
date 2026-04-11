@@ -757,7 +757,7 @@ export const mockTeamMembers: TeamMember[] = [
     name: 'Avery Brooks',
     role: 'Head of Community',
     avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=200&h=200&fit=crop',
-    bio: 'Building programs that connect creators with meaningful collaborations.',
+    bio: 'Runs owner roundtables and civic listening tours so every new market launch ships with local partners, not guesswork.',
     location: 'Austin, TX'
   },
   {
@@ -765,15 +765,15 @@ export const mockTeamMembers: TeamMember[] = [
     name: 'Jordan Lee',
     role: 'Product Lead',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
-    bio: 'Designing calm, curated experiences for modern teams.',
+    bio: 'Leads discovery experiences from search results to listing detail—obsessed with maps, filters, and honest photography.',
     location: 'San Francisco, CA'
   },
   {
     id: 'team-3',
     name: 'Priya Desai',
     role: 'Engineering',
-    avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=200&h=200&fit=crop',
-    bio: 'Focused on reliability, search, and delightful performance.',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop',
+    bio: 'Architects edge caching, media pipelines, and ranking infrastructure that stay fast when Friday night traffic spikes.',
     location: 'New York, NY'
   }
 ]
@@ -781,32 +781,32 @@ export const mockTeamMembers: TeamMember[] = [
 export const mockCommunityEvents: CommunityEvent[] = [
   {
     id: 'event-1',
-    title: 'Weekly Bookmark Jam',
+    title: 'Night Market Office Hours',
     date: 'Every Friday',
     tag: 'Live',
-    description: 'Curate your best links together and learn from fellow members.'
+    description: 'Pop-up advice for vendors balancing Square, UPI, and cash—moderated by our partnerships squad.'
   },
   {
     id: 'event-2',
-    title: 'Design Systems Roundtable',
-    date: 'April 2',
+    title: 'Listing Photography Clinic',
+    date: 'April 18',
     tag: 'Workshop',
-    description: 'Swap processes and audit templates with peers.'
+    description: 'Bring RAW files; we cover lighting recipes that work for bakeries, studios, and clinics alike.'
   },
   {
     id: 'event-3',
-    title: 'Creator Office Hours',
-    date: 'April 10',
+    title: 'Civic Data AMA',
+    date: 'April 24',
     tag: 'AMA',
-    description: 'Ask our team anything about your workflow.'
+    description: 'Planners and BID leaders ask our maps team how public datasets stay accurate inside Wiliin.'
   }
 ]
 
 export const mockCommunityGroups: CommunityGroup[] = [
-  { id: 'group-1', name: 'Product Leaders', members: 1240, focus: 'Roadmaps and strategy' },
-  { id: 'group-2', name: 'Design Ops', members: 860, focus: 'Systems and governance' },
-  { id: 'group-3', name: 'Frontend Guild', members: 1510, focus: 'UI engineering' },
-  { id: 'group-4', name: 'Remote Teams', members: 930, focus: 'Distributed rituals' }
+  { id: 'group-1', name: 'Hospitality Operators', members: 1840, focus: 'Seasonal menus, staffing, and local collabs' },
+  { id: 'group-2', name: 'Clinic & Studio Admins', members: 960, focus: 'Compliance copy, intake flows, and reviews' },
+  { id: 'group-3', name: 'Retail Merchants', members: 2120, focus: 'Inventory drops, events, and omnichannel promos' },
+  { id: 'group-4', name: 'Neighborhood Organizers', members: 740, focus: 'Street fairs, mutual aid, and civic data' }
 ]
 
 export const mockPressAssets: PressAsset[] = [
@@ -837,23 +837,23 @@ export const mockApiEndpoints: ApiEndpoint[] = [
   {
     id: 'api-1',
     method: 'GET',
-    path: '/api/bookmarks',
-    description: 'List bookmarks with filters.',
-    scope: 'bookmarks:read'
+    path: '/v1/listings',
+    description: 'Cursor-paginated catalog search with geo bounding boxes and category facets.',
+    scope: 'listings:read'
   },
   {
     id: 'api-2',
     method: 'POST',
-    path: '/api/bookmarks',
-    description: 'Create a new bookmark.',
-    scope: 'bookmarks:write'
+    path: '/v1/listings/{id}/media',
+    description: 'Signed upload URLs plus moderation callbacks for owner galleries.',
+    scope: 'listings:write'
   },
   {
     id: 'api-3',
     method: 'GET',
-    path: '/api/collections',
-    description: 'Fetch collections.',
-    scope: 'collections:read'
+    path: '/v1/webhooks/subscriptions',
+    description: 'List active webhook subscriptions and delivery health per topic.',
+    scope: 'integrations:admin'
   }
 ]
 
@@ -908,20 +908,20 @@ export const mockBlogPosts: BlogPost[] = [
 export const mockPressCoverage: PressCoverage[] = [
   {
     id: 'press-coverage-1',
-    outlet: 'Product Weekly',
-    headline: 'This platform makes link sharing feel premium.',
+    outlet: 'Local Commerce Review',
+    headline: 'Wiliin gives independent retailers the same polish national chains buy from agencies.',
     date: 'Mar 2026'
   },
   {
     id: 'press-coverage-2',
-    outlet: 'Design Journal',
-    headline: 'A fresh take on community curation.',
+    outlet: 'Maps & Mobility',
+    headline: 'How Wiliin blends editorial guides with structured listing data for walkable districts.',
     date: 'Feb 2026'
   },
   {
     id: 'press-coverage-3',
-    outlet: 'Tech Today',
-    headline: 'Why teams are switching to this platform.',
+    outlet: 'SaaS North',
+    headline: 'The team rebuilding directories as a calm, listing-first discovery layer.',
     date: 'Jan 2026'
   }
 ]
