@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 import { Folder, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { NavbarShell } from '@/components/shared/navbar-shell'
-import { Footer } from '@/components/shared/footer'
 import { BookmarkCard } from '@/components/sbm/bookmark-card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -15,6 +14,7 @@ import { mockBookmarkCollections } from '@/data/mock-data'
 import type { BookmarkCollection } from '@/types'
 import { loadFromStorage, saveToStorage, storageKeys } from '@/lib/local-storage'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Footer } from '@/components/shared/footer'
 import { useToast } from '@/components/ui/use-toast'
 
 export default function BookmarkCollectionDetailPage() {
@@ -51,7 +51,6 @@ export default function BookmarkCollectionDetailPage() {
             </CardContent>
           </Card>
         </main>
-        <Footer />
       </div>
     )
   }
@@ -121,8 +120,6 @@ export default function BookmarkCollectionDetailPage() {
         </section>
       </main>
 
-      <Footer />
-
       <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <DialogContent>
           <DialogHeader>
@@ -148,6 +145,8 @@ export default function BookmarkCollectionDetailPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Footer />
     </div>
   )
 }

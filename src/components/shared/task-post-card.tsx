@@ -175,16 +175,16 @@ export function TaskPostCard({
     <Link
       href={href}
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border bg-card shadow-[var(--shadow-md)] transition duration-[var(--duration-normal)] ease-[var(--ease-editorial)] hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-[var(--shadow-lg)]",
-        isArticleCard && "bg-gradient-to-b from-card via-card to-muted/35 ring-1 ring-border/50"
+        "group flex h-full flex-col overflow-hidden rounded-2xl border-0 bg-gradient-to-br from-white via-card to-muted/20 shadow-lg shadow-black/8 transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl hover:shadow-black/12",
+        isArticleCard && "from-white via-card to-muted/30"
       )}
     >
       <div
         className={cn(
           "relative overflow-hidden bg-muted",
           imageAspect,
-          isArticleCard && "mx-4 mt-4 rounded-xl border border-border/60 shadow-inner",
-          !isArticleCard && "rounded-t-[var(--radius-editorial-lg)]"
+          isArticleCard && "mx-4 mt-4 rounded-2xl border border-border/30 shadow-sm",
+          !isArticleCard && "rounded-t-2xl"
         )}
       >
         <ContentImage
@@ -192,21 +192,21 @@ export function TaskPostCard({
           alt={altText}
           fill
           sizes={imageSizes}
-          quality={75}
-          className="object-cover transition-transform duration-500 ease-[var(--ease-editorial)] group-hover:scale-[1.03]"
+          quality={85}
+          className="object-cover transition-all duration-700 ease-out group-hover:scale-[1.05] group-hover:brightness-110"
           intrinsicWidth={960}
           intrinsicHeight={720}
         />
         <div
           className={cn(
-            "absolute inset-0 bg-gradient-to-t from-foreground/45 via-transparent to-transparent opacity-80",
-            isArticleCard && "from-foreground/35 opacity-70"
+            "absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent",
+            isArticleCard && "from-black/30"
           )}
         />
         <span
           className={cn(
-            "absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-md",
-            isArticleCard && "left-5 top-5 bg-black/45"
+            "absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-white/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-800 backdrop-blur-xl shadow-sm",
+            isArticleCard && "left-5 top-5 bg-white/85"
           )}
         >
           <Tag className="h-3.5 w-3.5" />
@@ -219,21 +219,21 @@ export function TaskPostCard({
           </span>
         )}
       </div>
-      <div className={cn("flex flex-1 flex-col", compact ? "py-4" : "p-6", isArticleCard && "px-6 pb-6 pt-4")}>
+      <div className={cn("flex flex-1 flex-col", compact ? "py-5" : "p-6", isArticleCard && "px-6 pb-6 pt-5")}>
         {isArticleCard ? (
-          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-primary/90">Article</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-primary/80">Article</span>
         ) : null}
         <h3
           className={cn(
-            "line-clamp-2 font-semibold leading-snug text-foreground",
-            isArticleCard ? "mt-2 text-[1.35rem] font-[family-name:var(--font-display)] tracking-tight" : "text-lg"
+            "line-clamp-2 font-semibold leading-tight text-foreground transition-colors duration-200 group-hover:text-primary",
+            isArticleCard ? "mt-2 text-[1.4rem] font-[family-name:var(--font-display)] tracking-tight" : "mt-1 text-lg"
           )}
         >
           {post.title}
         </h3>
         <p
           className={cn(
-            "mt-3 text-sm leading-7 text-muted-foreground",
+            "mt-3 text-sm leading-6 text-muted-foreground",
             isArticleCard ? "line-clamp-4" : "line-clamp-3"
           )}
         >

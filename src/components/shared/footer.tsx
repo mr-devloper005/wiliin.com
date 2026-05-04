@@ -79,9 +79,6 @@ export function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="mt-5 max-w-sm text-sm leading-7 text-muted-foreground">
-              {SITE_CONFIG.description}
-            </p>
             <div className="mt-6 flex gap-3">
               {socialLinks.map((item) => (
                 <Link

@@ -65,7 +65,11 @@ export function TaskListClient({ task, initialPosts, category }: Props) {
     <div
       className={cn(
         "grid gap-7 sm:grid-cols-2",
-        task === "article" ? "lg:grid-cols-3 xl:gap-8" : "lg:grid-cols-4"
+        task === "article"
+          ? "lg:grid-cols-3 xl:gap-8"
+          : "lg:grid-cols-3 xl:grid-cols-4",
+        task === "listing" &&
+          "[&>*:first-child]:sm:col-span-2 [&>*:first-child]:lg:col-span-2 [&>*:first-child]:xl:col-span-2"
       )}
     >
       {merged.map((post) => {

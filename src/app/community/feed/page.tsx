@@ -11,6 +11,7 @@ export const generateMetadata = () =>
     description: `Browse public updates, local shout-outs, and discussion threads on ${SITE_CONFIG.name}.`,
   })
 
-export default function CommunityFeedPage({ searchParams }: { searchParams?: { category?: string } }) {
-  return <TaskListPage task="social" category={searchParams?.category} />
+export default async function CommunityFeedPage({ searchParams }: { searchParams?: Promise<{ category?: string }> }) {
+  const resolvedSearchParams = await searchParams;
+  return <TaskListPage task="social" category={resolvedSearchParams?.category} />
 }
