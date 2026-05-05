@@ -39,19 +39,19 @@ const services = [
 
 const incidents = [
   {
-    date: "Apr 4, 2026",
+    date: "",
     title: "Elevated latency on image transforms",
     status: "Resolved",
     body: "A hotfix rolled out within 42 minutes; backlog cleared automatically once workers scaled.",
   },
   {
-    date: "Mar 21, 2026",
+    date: "",
     title: "Delayed webhook retries",
     status: "Resolved",
     body: "Partner deliveries caught up after DNS failover; no data loss.",
   },
   {
-    date: "Feb 9, 2026",
+    date: "",
     title: "Search index drift",
     status: "Resolved",
     body: "Manual reindex restored category filters for ~18 minutes.",

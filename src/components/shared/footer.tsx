@@ -25,7 +25,6 @@ const footerLinks = {
     })),
   company: [
     { name: 'About', href: '/about' },
-    { name: 'Team', href: '/team' },
     { name: 'Careers', href: '/careers' },
     { name: 'Blog', href: '/blog' },
     { name: 'Press', href: '/press' },
@@ -151,7 +150,7 @@ export function Footer() {
 
         <div className="mt-14 border-t border-border pt-8">
           <p className="text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            &copy; {new Date().getFullYear()} {SITE_CONFIG.name}. All rights reserved.
+            &copy; {SITE_CONFIG.name}. All rights reserved.
           </p>
         </div>
       </div>
