@@ -76,7 +76,7 @@ export default function CookiesPage() {
       description="You should know exactly what persists on your device. Here is how we use cookies today and how to control them."
     >
       <LegalDocument
-        lastUpdated="April 11, 2026"
+        lastUpdated=""
         intro={`This Cookie Policy supplements the ${SITE_CONFIG.name} Privacy Policy and applies to visitors on the web.`}
         sections={sections}
       />

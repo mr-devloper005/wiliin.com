@@ -1,20 +1,20 @@
-import { ContentImage } from "@/components/shared/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MapPin, Globe, Phone, Tag, Mail } from "lucide-react";
+import { Globe, Mail, MapPin, Phone, Tag } from "lucide-react";
+import { ArticleComments } from "@/components/tasks/article-comments";
+import { ImageLightbox } from "@/components/shared/image-lightbox";
 import { NavbarShell } from "@/components/shared/navbar-shell";
-import { Footer } from "@/components/shared/footer";
+import { RichContent, formatRichHtml } from "@/components/shared/rich-content";
 import { TaskPostCard } from "@/components/shared/task-post-card";
+import { TaskImageCarousel } from "@/components/tasks/task-image-carousel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
 import { buildPostUrl, fetchTaskPostBySlug, fetchTaskPosts } from "@/lib/task-data";
 import { SITE_CONFIG, getTaskConfig, type TaskKey } from "@/lib/site-config";
 import type { SitePost } from "@/lib/site-connector";
-import { TaskImageCarousel } from "@/components/tasks/task-image-carousel";
+import { Footer } from "@/components/shared/footer";
 import { cn } from "@/lib/utils";
-import { ArticleComments } from "@/components/tasks/article-comments";
-import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
-import { RichContent, formatRichHtml } from "@/components/shared/rich-content";
 
 type PostContent = {
   category?: string;
@@ -139,14 +139,9 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
   const description = content.description || post.summary || "Details coming soon.";
   const descriptionHtml = !isArticle ? formatRichHtml(description, "Details coming soon.") : "";
   const articleHtml = isArticle ? formatArticleHtml(content, post) : "";
-  const articleSummary =
-    post.summary ||
-    (typeof content.excerpt === "string" ? content.excerpt : "") ||
-    "";
+  const articleSummary = post.summary || (typeof content.excerpt === "string" ? content.excerpt : "") || "";
   const articleAuthor =
-    (typeof content.author === "string" && content.author.trim()) ||
-    post.authorName ||
-    "Editorial Team";
+    (typeof content.author === "string" && content.author.trim()) || post.authorName || "Editorial Team";
   const articleDate = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString("en-IN", {
         year: "numeric",
@@ -226,15 +221,10 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
           href={taskConfig?.route || "/"}
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:border-primary/25 hover:text-foreground"
         >
-          <span aria-hidden>←</span> Back to {taskConfig?.label || "posts"}
+          <span aria-hidden>&larr;</span> Back to {taskConfig?.label || "posts"}
         </Link>
 
-        <div
-          className={cn(
-            "grid gap-10",
-            hideSidebar ? "lg:grid-cols-1" : "lg:grid-cols-[2fr_1fr]"
-          )}
-        >
+        <div className={cn("grid gap-10", hideSidebar ? "lg:grid-cols-1" : "lg:grid-cols-[2fr_1fr]")}>
           <div className={cn(isClassified ? "space-y-8" : "")}>
             {isArticle ? (
               <div className="w-full">
@@ -250,15 +240,10 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                     </h1>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted-foreground">
                       <span className="font-medium text-foreground/90">By {articleAuthor}</span>
-                      {articleDate ? (
-                        <>
-                          <span className="text-border" aria-hidden>
-                            ·
-                          </span>
-                          <time dateTime={post.publishedAt || undefined}>{articleDate}</time>
-                        </>
-                      ) : null}
-                      <Badge variant="secondary" className="inline-flex items-center gap-1 border border-border/60 bg-background/80">
+                      <Badge
+                        variant="secondary"
+                        className="inline-flex items-center gap-1 border border-border/60 bg-background/80"
+                      >
                         <Tag className="h-3.5 w-3.5" />
                         {category}
                       </Badge>
@@ -280,19 +265,23 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
 
                 {images[0] ? (
                   <div className="article-measure relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border bg-muted shadow-[var(--shadow-lg)] sm:mt-10">
-                    <ContentImage
+                    <ImageLightbox
                       src={images[0]}
                       alt={`${post.title} featured image`}
-                      fill
-                      className="object-cover"
-                      intrinsicWidth={1600}
-                      intrinsicHeight={900}
+                      triggerClassName="h-full"
+                      imageClassName="object-cover"
+                      sizes="(max-width: 768px) 100vw, 1100px"
+                      width={1600}
+                      height={900}
                     />
                   </div>
                 ) : null}
 
                 <div className="article-measure mt-10 sm:mt-12">
-                  <RichContent html={articleHtml} className="leading-8 prose-p:my-6 prose-h2:my-8 prose-h3:my-6 prose-ul:my-6" />
+                  <RichContent
+                    html={articleHtml}
+                    className="leading-8 prose-p:my-6 prose-h2:my-8 prose-h3:my-6 prose-ul:my-6"
+                  />
                 </div>
                 <div className="article-measure mt-12 border-t border-border/80 pt-10">
                   <ArticleComments slug={post.slug} />
@@ -301,78 +290,112 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
             ) : null}
 
             {!isArticle ? (
-              <>
+              <section
+                className={cn(
+                  "rounded-[var(--radius-editorial-lg)] border border-border/70 bg-gradient-to-br from-card via-card to-muted/25 p-5 shadow-[var(--shadow-md)] sm:p-6 lg:p-8",
+                  isClassified ? "mx-auto w-full max-w-5xl" : ""
+                )}
+              >
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                  <Badge
+                    variant="secondary"
+                    className="inline-flex items-center gap-1 border border-border/60 bg-background/80"
+                  >
+                    <Tag className="h-3.5 w-3.5" />
+                    {category}
+                  </Badge>
+                  {location && (
+                    <span className="inline-flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      {location}
+                    </span>
+                  )}
+                </div>
+                <h1 className="mt-4 max-w-4xl text-balance font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-[3.1rem]">
+                  {post.title}
+                </h1>
+                <div className="mt-5 h-px w-full bg-gradient-to-r from-primary/50 via-border to-transparent" />
                 {!isBookmark ? (
-                  <div className={cn(isClassified ? "w-full" : "")}>
+                  <div className={cn("mt-6", isClassified ? "w-full" : "")}>
                     <TaskImageCarousel images={images} />
                   </div>
                 ) : null}
 
-                <div className={cn(isClassified ? "mx-auto w-full max-w-4xl" : "mt-6")}>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                    <Badge variant="secondary" className="inline-flex items-center gap-1">
-                      <Tag className="h-3.5 w-3.5" />
-                      {category}
-                    </Badge>
-                    {location && (
-                      <span className="inline-flex items-center gap-1">
-                        <MapPin className="h-4 w-4" />
-                        {location}
-                      </span>
-                    )}
+                <div
+                  className={cn(
+                    "mt-8 grid gap-8",
+                    isClassified ? "lg:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.85fr)]" : "lg:grid-cols-1"
+                  )}
+                >
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                      Overview
+                    </p>
+                    <RichContent html={descriptionHtml} className="mt-4 max-w-none text-[15px] leading-8" />
                   </div>
-                  <h1 className="mt-4 text-3xl font-semibold text-foreground">{post.title}</h1>
-                  <RichContent html={descriptionHtml} className="mt-3 max-w-3xl" />
+                  {isClassified ? (
+                    <div className="rounded-[calc(var(--radius-editorial-lg)-0.5rem)] border border-border/70 bg-background/80 p-5 shadow-[var(--shadow-sm)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                        Quick details
+                      </p>
+                      <div className="mt-4 space-y-3 text-sm text-muted-foreground">
+                        {content.website && (
+                          <div className="flex items-start gap-2">
+                            <Globe className="mt-0.5 h-4 w-4" />
+                            <a
+                              href={content.website}
+                              className="break-all text-foreground hover:underline"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {content.website}
+                            </a>
+                          </div>
+                        )}
+                        {content.phone && (
+                          <div className="flex items-start gap-2">
+                            <Phone className="mt-0.5 h-4 w-4" />
+                            <span>{content.phone}</span>
+                          </div>
+                        )}
+                        {content.email && (
+                          <div className="flex items-start gap-2">
+                            <Mail className="mt-0.5 h-4 w-4" />
+                            <a
+                              href={`mailto:${content.email}`}
+                              className="break-all text-foreground hover:underline"
+                            >
+                              {content.email}
+                            </a>
+                          </div>
+                        )}
+                        {location && (
+                          <div className="flex items-start gap-2">
+                            <MapPin className="mt-0.5 h-4 w-4" />
+                            <span>{location}</span>
+                          </div>
+                        )}
+                      </div>
+                      {content.website ? (
+                        <Button className="mt-5 w-full" asChild>
+                          <a href={content.website} target="_blank" rel="noreferrer">
+                            Visit Website
+                          </a>
+                        </Button>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
-              </>
-            ) : null}
-
-            {isClassified ? (
-              <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-6">
-                <h2 className="text-lg font-semibold text-foreground">Business details</h2>
-                <div className="mt-4 space-y-3 text-sm text-muted-foreground">
-                  {content.website && (
-                    <div className="flex items-start gap-2">
-                      <Globe className="mt-0.5 h-4 w-4" />
-                      <a
-                        href={content.website}
-                        className="break-all text-foreground hover:underline"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {content.website}
-                      </a>
-                    </div>
-                  )}
-                  {content.phone && (
-                    <div className="flex items-start gap-2">
-                      <Phone className="mt-0.5 h-4 w-4" />
-                      <span>{content.phone}</span>
-                    </div>
-                  )}
-                  {content.email && (
-                    <div className="flex items-start gap-2">
-                      <Mail className="mt-0.5 h-4 w-4" />
-                      <a
-                        href={`mailto:${content.email}`}
-                        className="break-all text-foreground hover:underline"
-                      >
-                        {content.email}
-                      </a>
-                    </div>
-                  )}
-                  {location && (
-                    <div className="flex items-start gap-2">
-                      <MapPin className="mt-0.5 h-4 w-4" />
-                      <span>{location}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+              </section>
             ) : null}
 
             {content.highlights?.length && !isArticle ? (
-              <div className={cn("mt-8 rounded-2xl border border-border bg-card p-6", isClassified ? "mx-auto w-full max-w-4xl" : "")}>
+              <div
+                className={cn(
+                  "mt-8 rounded-2xl border border-border bg-card p-6",
+                  isClassified ? "mx-auto w-full max-w-4xl" : ""
+                )}
+              >
                 <h2 className="text-lg font-semibold text-foreground">Highlights</h2>
                 <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
                   {content.highlights.map((item) => (
@@ -386,22 +409,16 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
               <div className="mx-auto w-full max-w-4xl rounded-2xl border border-border bg-card p-4">
                 <p className="text-sm font-semibold text-foreground">Location map</p>
                 <div className="mt-4 overflow-hidden rounded-xl border border-border">
-                  <iframe
-                    title="Business location map"
-                    src={mapEmbedUrl}
-                    className="h-56 w-full"
-                    loading="lazy"
-                  />
+                  <iframe title="Business location map" src={mapEmbedUrl} className="h-56 w-full" loading="lazy" />
                 </div>
               </div>
             ) : null}
-
           </div>
 
-          {!hideSidebar ? (
+          {!hideSidebar && !isClassified ? (
             <aside className="space-y-6">
-            <div className="rounded-2xl border border-border bg-card p-6">
-              <h2 className="text-lg font-semibold text-foreground">Listing details</h2>
+              <div className="rounded-2xl border border-border bg-card p-6">
+                <h2 className="text-lg font-semibold text-foreground">Listing details</h2>
                 <div className="mt-4 space-y-3 text-sm text-muted-foreground">
                   {content.website && (
                     <div className="flex items-start gap-2">
@@ -425,10 +442,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                   {content.email && (
                     <div className="flex items-start gap-2">
                       <Mail className="mt-0.5 h-4 w-4" />
-                      <a
-                        href={`mailto:${content.email}`}
-                        className="break-all text-foreground hover:underline"
-                      >
+                      <a href={`mailto:${content.email}`} className="break-all text-foreground hover:underline">
                         {content.email}
                       </a>
                     </div>
@@ -440,62 +454,56 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
                     </div>
                   )}
                 </div>
-              {content.website ? (
-                <Button className="mt-5 w-full" asChild>
-                  <a href={content.website} target="_blank" rel="noreferrer">
-                    Visit Website
-                  </a>
-                </Button>
-              ) : null}
-            </div>
-
-            {mapEmbedUrl ? (
-              <div className="rounded-2xl border border-border bg-card p-4">
-                <p className="text-sm font-semibold text-foreground">Location map</p>
-                <div className="mt-4 overflow-hidden rounded-xl border border-border">
-                  <iframe
-                    title="Business location map"
-                    src={mapEmbedUrl}
-                    className="h-56 w-full"
-                    loading="lazy"
-                  />
-                </div>
+                {content.website ? (
+                  <Button className="mt-5 w-full" asChild>
+                    <a href={content.website} target="_blank" rel="noreferrer">
+                      Visit Website
+                    </a>
+                  </Button>
+                ) : null}
               </div>
-            ) : null}
 
-          </aside>
+              {mapEmbedUrl ? (
+                <div className="rounded-2xl border border-border bg-card p-4">
+                  <p className="text-sm font-semibold text-foreground">Location map</p>
+                  <div className="mt-4 overflow-hidden rounded-xl border border-border">
+                    <iframe title="Business location map" src={mapEmbedUrl} className="h-56 w-full" loading="lazy" />
+                  </div>
+                </div>
+              ) : null}
+            </aside>
           ) : null}
         </div>
 
         <section className="mt-14 border-t border-border/70 pt-12 sm:mt-16 sm:pt-14">
           {related.length ? (
             <>
-            <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="kicker-rule" aria-hidden />
-                <h2 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                  More in {category}
-                </h2>
+              <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <div className="kicker-rule" aria-hidden />
+                  <h2 className="mt-4 font-[family-name:var(--font-display)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                    More in {category}
+                  </h2>
+                </div>
+                {taskConfig?.route && (
+                  <Link
+                    href={taskConfig.route}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:text-primary/80"
+                  >
+                    View all
+                  </Link>
+                )}
               </div>
-              {taskConfig?.route && (
-                <Link
-                  href={taskConfig.route}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:text-primary/80"
-                >
-                  View all
-                </Link>
-              )}
-            </div>
-            <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
-              {related.map((item) => (
-                <TaskPostCard
-                  key={item.id}
-                  post={item}
-                  href={buildPostUrl(task, item.slug)}
-                  taskKey={task}
-                />
-              ))}
-            </div>
+              <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+                {related.map((item) => (
+                  <TaskPostCard
+                    key={item.id}
+                    post={item}
+                    href={buildPostUrl(task, item.slug)}
+                    taskKey={task}
+                  />
+                ))}
+              </div>
             </>
           ) : null}
           <nav className="mt-10 rounded-[var(--radius-editorial)] border border-border bg-card/70 p-5 shadow-[var(--shadow-sm)] sm:p-6">
@@ -513,10 +521,7 @@ export async function TaskDetailPage({ task, slug }: { task: TaskKey; slug: stri
               ))}
               {taskConfig?.route ? (
                 <li>
-                  <Link
-                    href={taskConfig.route}
-                    className="text-primary underline-offset-4 hover:underline"
-                  >
+                  <Link href={taskConfig.route} className="text-primary underline-offset-4 hover:underline">
                     Browse all {taskConfig.label}
                   </Link>
                 </li>

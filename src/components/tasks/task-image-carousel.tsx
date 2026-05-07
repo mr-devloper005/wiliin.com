@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { ContentImage } from "@/components/shared/content-image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ImageLightbox } from "@/components/shared/image-lightbox";
 
 export function TaskImageCarousel({ images }: { images: string[] }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -36,16 +36,16 @@ export function TaskImageCarousel({ images }: { images: string[] }) {
           {images.map((src, index) => (
             <div key={`${src}-${index}`} className="min-w-0 flex-[0_0_100%]">
               <div className="relative aspect-[16/10] w-full">
-                <ContentImage
+                <ImageLightbox
                   src={src}
                   alt={`Gallery image ${index + 1} for verified business listing`}
-                  fill
+                  label={`Open photo ${index + 1}`}
+                  triggerClassName="h-full"
                   sizes="(max-width: 768px) 100vw, 900px"
-                  quality={78}
-                  className="object-cover"
-                  intrinsicWidth={1440}
-                  intrinsicHeight={900}
+                  imageClassName="object-cover"
                   priority={index === 0}
+                  width={1440}
+                  height={900}
                 />
               </div>
             </div>

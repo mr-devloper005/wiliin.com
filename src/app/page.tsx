@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { NavbarShell } from "@/components/shared/navbar-shell";
-import { Footer } from "@/components/shared/footer";
 import { HeroSection } from "@/components/home/hero-section";
 import { CTASection } from "@/components/home/cta-section";
 import { TaskFeedSection } from "@/components/home/task-feed-section";
@@ -11,6 +10,7 @@ import { SITE_CONFIG } from "@/lib/site-config";
 import { getTasksForShell } from "@/config/site.ui";
 import { buildPageMetadata } from "@/lib/seo";
 import { fetchTaskPosts, getPostImages } from "@/lib/task-data";
+import { Footer } from "@/components/shared/footer";
 import { siteContent } from "@/config/site.content";
 
 export const revalidate = 300;
