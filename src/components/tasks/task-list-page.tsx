@@ -1,10 +1,10 @@
 import { NavbarShell } from "@/components/shared/navbar-shell";
-import { Footer } from "@/components/shared/footer";
 import { TaskListClient } from "@/components/tasks/task-list-client";
 import { SchemaJsonLd } from "@/components/seo/schema-jsonld";
 import { fetchTaskPosts } from "@/lib/task-data";
 import { SITE_CONFIG, getTaskConfig, type TaskKey } from "@/lib/site-config";
 import { CATEGORY_OPTIONS, normalizeCategory } from "@/lib/categories";
+import { Footer } from "@/components/shared/footer";
 import { cn } from "@/lib/utils";
 
 import { taskIntroCopy } from '@/config/site.content';
@@ -64,63 +64,76 @@ export async function TaskListPage({
             }}
           />
         ) : null}
-        <div
-          className={cn(
-            "mb-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between",
-            task === "article"
-              ? "rounded-[var(--radius-editorial-lg)] border border-border/60 bg-gradient-to-br from-card via-card to-muted/30 p-6 sm:p-8 lg:mb-14"
-              : "border-b border-border/70 pb-10"
-          )}
-        >
-          <div className="max-w-2xl">
-            {task === "article" ? <div className="kicker-rule" aria-hidden /> : null}
-            <p
-              className={cn(
-                "text-xs uppercase tracking-[0.28em] text-muted-foreground",
-                task === "article" && "mt-4"
-              )}
+        <section className="relative mb-12 overflow-hidden rounded-[var(--radius-editorial-lg)] border border-border/70 bg-gradient-to-br from-card via-card to-muted/35 p-6 shadow-[var(--shadow-md)] sm:p-8 lg:mb-14 lg:p-10">
+          <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-primary/10 blur-3xl" aria-hidden />
+          <div className="pointer-events-none absolute -left-14 bottom-0 h-40 w-40 rounded-full bg-primary/8 blur-3xl" aria-hidden />
+          <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(280px,0.8fr)] lg:items-end">
+            <div className="max-w-3xl">
+              {task === "article" ? <div className="kicker-rule" aria-hidden /> : null}
+              <p
+                className={cn(
+                  "text-xs uppercase tracking-[0.28em] text-muted-foreground",
+                  task === "article" && "mt-4"
+                )}
+              >
+                {taskConfig?.label || task}
+              </p>
+              <h1
+                className={cn(
+                  "mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl lg:text-[3.2rem]",
+                  task === "article" && "font-[family-name:var(--font-display)]"
+                )}
+              >
+                {taskConfig?.description || "Latest posts"}
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
+                Browse a cleaner directory-style feed with quick category filtering, richer cards,
+                and a layout that helps visitors scan the best options faster.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="rounded-full border border-border/70 bg-background/70 px-3 py-2">
+                  {posts.length} results loaded
+                </span>
+                <span className="rounded-full border border-border/70 bg-background/70 px-3 py-2">
+                  {CATEGORY_OPTIONS.length} categories
+                </span>
+                <span className="rounded-full border border-border/70 bg-background/70 px-3 py-2">
+                  Editorial card layout
+                </span>
+              </div>
+            </div>
+            <form
+              className="rounded-[calc(var(--radius-editorial-lg)-0.4rem)] border border-border/70 bg-background/80 p-5 shadow-[var(--shadow-sm)] backdrop-blur"
+              action={taskConfig?.route || "#"}
             >
-              {taskConfig?.label || task}
-            </p>
-            <h1
-              className={cn(
-                "mt-3 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl",
-                task === "article" && "font-[family-name:var(--font-display)] sm:text-[2.65rem]"
-              )}
-            >
-              {taskConfig?.description || "Latest posts"}
-            </h1>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Browse by category to narrow results.
-            </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                Refine feed
+              </p>
+              <label className="mt-4 block text-sm font-medium text-foreground">Category</label>
+              <select
+                name="category"
+                defaultValue={normalizedCategory}
+                className="mt-2 h-11 w-full rounded-xl border border-border bg-card px-3 text-sm text-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              >
+                <option value="all">All categories</option>
+                {CATEGORY_OPTIONS.map((item) => (
+                  <option key={item.slug} value={item.slug}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                className="mt-4 h-11 w-full rounded-xl border border-border bg-secondary px-5 text-sm font-semibold text-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:bg-secondary/80"
+              >
+                Apply filter
+              </button>
+              <p className="mt-3 text-xs leading-6 text-muted-foreground">
+                Use category filters to narrow the list without changing any listing data.
+              </p>
+            </form>
           </div>
-          <form
-            className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
-            action={taskConfig?.route || "#"}
-          >
-            <label className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              Category
-            </label>
-            <select
-              name="category"
-              defaultValue={normalizedCategory}
-              className="h-11 min-w-[160px] rounded-xl border border-border bg-card px-3 text-sm text-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] focus-visible:border-ring focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
-            >
-              <option value="all">All categories</option>
-              {CATEGORY_OPTIONS.map((item) => (
-                <option key={item.slug} value={item.slug}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-            <button
-              type="submit"
-              className="h-11 rounded-xl border border-border bg-secondary px-5 text-sm font-semibold text-foreground shadow-[var(--shadow-sm)] transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:bg-secondary/80"
-            >
-              Apply
-            </button>
-          </form>
-        </div>
+        </section>
 
         {intro ? (
           <section className="mb-12 rounded-[var(--radius-editorial-lg)] border border-border bg-card/80 p-6 shadow-[var(--shadow-sm)] sm:p-8">

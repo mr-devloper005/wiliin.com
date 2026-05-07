@@ -88,7 +88,6 @@ export function PressKitClient({
               <CardContent className="p-5">
                 <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/80">{item.outlet}</div>
                 <p className="mt-2 text-sm font-medium leading-snug text-foreground">{item.headline}</p>
-                <p className="mt-2 text-xs text-muted-foreground">{item.date}</p>
               </CardContent>
             </Card>
           ))}

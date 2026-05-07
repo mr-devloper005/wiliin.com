@@ -66,9 +66,6 @@ export function Navbar() {
               <span className="block truncate font-[family-name:var(--font-display)] text-xl font-semibold tracking-tight text-foreground">
                 {SITE_CONFIG.name}
               </span>
-              <span className="hidden text-[10px] uppercase tracking-[0.28em] text-muted-foreground sm:block">
-                {siteContent.navbar.tagline}
-              </span>
             </div>
           </Link>
 

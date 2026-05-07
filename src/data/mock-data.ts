@@ -910,18 +910,18 @@ export const mockPressCoverage: PressCoverage[] = [
     id: 'press-coverage-1',
     outlet: 'Local Commerce Review',
     headline: 'Wiliin gives independent retailers the same polish national chains buy from agencies.',
-    date: 'Mar 2026'
+    date: ''
   },
   {
     id: 'press-coverage-2',
     outlet: 'Maps & Mobility',
     headline: 'How Wiliin blends editorial guides with structured listing data for walkable districts.',
-    date: 'Feb 2026'
+    date: ''
   },
   {
     id: 'press-coverage-3',
     outlet: 'SaaS North',
     headline: 'The team rebuilding directories as a calm, listing-first discovery layer.',
-    date: 'Jan 2026'
+    date: ''
   }
 ]
