@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FileText, Building2, LayoutGrid, Tag, Github, Twitter, Linkedin, Image as ImageIcon, User } from 'lucide-react'
+import { FileText, Building2, LayoutGrid, Tag, Image as ImageIcon, User } from 'lucide-react'
 import { SITE_CONFIG, type TaskKey } from '@/lib/site-config'
 import { siteContent } from '@/config/site.content'
 import { getTasksForShell } from '@/config/site.ui'
@@ -26,14 +26,11 @@ const footerLinks = {
   company: [
     { name: 'About', href: '/about' },
     { name: 'Careers', href: '/careers' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Press', href: '/press' },
+    { name: 'Contact', href: '/contact' },
   ],
   resources: [
     { name: 'Help Center', href: '/help' },
-    { name: 'Community', href: '/community' },
-    { name: 'Developers', href: '/developers' },
-    { name: 'Status', href: '/status' },
+
   ],
   legal: [
     { name: 'Privacy', href: '/privacy' },
@@ -42,12 +39,6 @@ const footerLinks = {
     { name: 'Licenses', href: '/licenses' },
   ],
 }
-
-const socialLinks = [
-  { name: 'Twitter', href: 'https://twitter.com', icon: Twitter },
-  { name: 'GitHub', href: 'https://github.com', icon: Github },
-  { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-]
 
 export function Footer() {
   return (
@@ -78,20 +69,6 @@ export function Footer() {
                 </span>
               </div>
             </Link>
-            <div className="mt-6 flex gap-3">
-              {socialLinks.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="rounded-full border border-border bg-card/80 p-2.5 text-muted-foreground transition duration-[var(--duration-fast)] ease-[var(--ease-editorial)] hover:border-primary/25 hover:bg-card hover:text-primary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span className="sr-only">{item.name}</span>
-                </Link>
-              ))}
-            </div>
           </div>
 
           <div className="lg:col-span-2">
