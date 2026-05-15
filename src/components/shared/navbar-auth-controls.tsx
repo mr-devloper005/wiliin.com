@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Bell, ChevronDown, FileText, LayoutGrid, LogOut, Plus, Settings, User, Building2, Tag, Image as ImageIcon } from 'lucide-react'
+import { ChevronDown, FileText, LayoutGrid, LogOut, Plus, Settings, User, Building2, Tag, Image as ImageIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,9 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { useToast } from '@/components/ui/use-toast'
 import { useAuth } from '@/lib/auth-context'
 import { type TaskKey } from '@/lib/site-config'
 import { getTasksForShell } from '@/config/site.ui'
@@ -31,8 +28,7 @@ const taskIcons: Record<TaskKey, any> = {
 }
 
 export function NavbarAuthControls() {
-  const { user, logout } = useAuth()
-  const { toast } = useToast()
+  const { logout } = useAuth()
   const shellTasks = getTasksForShell()
 
   return (
@@ -78,69 +74,12 @@ export function NavbarAuthControls() {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative rounded-full text-muted-foreground hover:bg-primary/[0.06] hover:text-primary">
-            <Bell className="h-5 w-5" />
-            <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full bg-accent p-0 text-[10px] text-accent-foreground">
-              3
-            </Badge>
-            <span className="sr-only">Notifications</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-80 border-border bg-popover">
-          <div className="flex items-center justify-between border-b border-border p-3">
-            <span className="text-sm font-semibold text-foreground">Notifications</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="h-auto p-0 text-xs text-muted-foreground"
-              onClick={() =>
-                toast({
-                  title: 'Notifications cleared',
-                  description: 'You are all caught up.',
-                })
-              }
-            >
-              Mark all read
-            </Button>
-          </div>
-          <div className="max-h-80 overflow-y-auto">
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <span className="text-sm">Your article was published</span>
-              <span className="text-xs text-muted-foreground">2 minutes ago</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <span className="text-sm">New comment on your article</span>
-              <span className="text-xs text-muted-foreground">1 hour ago</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 p-3">
-              <span className="text-sm">Draft saved: weekend essay</span>
-              <span className="text-xs text-muted-foreground">3 hours ago</span>
-            </DropdownMenuItem>
-          </div>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground hover:bg-primary/[0.06] hover:text-primary">
-            <Avatar className="h-9 w-9 border border-border">
-              <AvatarImage src={user?.avatar} alt={user?.name} />
-              <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
+          <Button variant="outline" size="sm" className="rounded-full">
+            <LogOut className="mr-2 h-4 w-4" />
+            Sign Out
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56 border-border bg-popover">
-          <div className="flex items-center gap-3 p-3">
-            <Avatar className="h-10 w-10 border border-border">
-              <AvatarImage src={user?.avatar} alt={user?.name} />
-              <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">{user?.name}</span>
-              <span className="text-xs text-muted-foreground">{user?.email}</span>
-            </div>
-          </div>
-          <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href="/dashboard/saved">
               <FileText className="mr-2 h-4 w-4" />

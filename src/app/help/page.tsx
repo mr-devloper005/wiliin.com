@@ -78,14 +78,9 @@ export default function HelpPage() {
       title="Help Center"
       description="Practical answers for explorers hunting the right spot and owners managing a living storefront online."
       actions={
-        <>
-          <Button variant="outline" asChild>
-            <Link href="/status">System status</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/contact">Contact support</Link>
-          </Button>
-        </>
+        <Button asChild>
+          <Link href="/contact">Contact support</Link>
+        </Button>
       }
     >
       <div className="rounded-2xl border border-border/80 bg-gradient-to-r from-muted/40 via-background to-background p-6 sm:p-8">
