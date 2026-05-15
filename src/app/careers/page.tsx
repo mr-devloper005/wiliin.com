@@ -115,9 +115,6 @@ export default function CareersPage() {
                 </li>
               ))}
             </ul>
-            <Button className="mt-8 w-full" asChild>
-              <Link href="/team">Meet the team</Link>
-            </Button>
           </CardContent>
         </Card>
       </div>

@@ -1,4 +1,3 @@
-﻿import Link from 'next/link'
 import { PageShell } from '@/components/shared/page-shell'
 import { Card, CardContent } from '@/components/ui/card'
 import { buildPageMetadata } from '@/lib/seo'
@@ -62,12 +61,7 @@ export default function LicensesPage() {
           <CardContent className="space-y-4 p-6">
             <SectionLabel>Attribution</SectionLabel>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Full license texts ship inside deployed node_modules for each dependency. If you need a consolidated PDF for
-              compliance reviews, email{' '}
-              <Link className="text-primary underline-offset-4 hover:underline" href={`mailto:legal@${SITE_CONFIG.domain}`}>
-                legal@{SITE_CONFIG.domain}
-              </Link>
-              .
+              Full license texts ship inside deployed node_modules for each dependency.
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Unsplash photography used in demos retains its photographer license. Replace placeholder media before production
@@ -79,3 +73,5 @@ export default function LicensesPage() {
     </PageShell>
   )
 }
+
+
